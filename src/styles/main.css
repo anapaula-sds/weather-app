@@ -46,21 +46,20 @@ html {
 }
 
 /* 
-   Para forçar TUDO na mesma tela sem scroll:
-   - align-items: center
-   - overflow: hidden 
+   Para permitir rolagem natural em telas menores:
+   - min-height: 100vh (cresce se necessário)
+   - overflow-y: auto
 */
 body {
   font-family : 'Outfit', sans-serif;
-  height      : 100vh;
+  min-height  : 100vh;
   width       : 100vw;
   background  : linear-gradient(160deg, var(--theme-bg-top), var(--theme-bg-mid), var(--theme-bg-bot));
   transition  : background 1.2s ease;
   display     : flex;
-  justify-content : center;
-  align-items     : center;
-  padding     : 10px;
-  overflow    : hidden; /* 100% livre de scrolls */
+  padding     : 20px 10px;
+  overflow-x  : hidden;
+  overflow-y  : auto;
 }
 
 /* ─────────────────────────────────────────────────────
@@ -137,8 +136,7 @@ body.theme-fog .fog-layer { opacity:1; }
   z-index   : 10;
   width     : 100%;
   max-width : 420px;
-  max-height: 98vh; /* para garantir que nunca cresça mais que a tela */
-  margin    : 0 auto;
+  margin    : auto; /* Centraliza no flex sem cortar o topo quando há rolagem */
   display   : flex;
   flex-direction: column;
 }
@@ -150,14 +148,11 @@ body.theme-fog .fog-layer { opacity:1; }
   border              : 1px solid var(--glass-border);
   border-radius       : var(--radius-card);
   box-shadow          : var(--glass-shadow);
-  padding             : 24px 20px 20px; /* Reduzido para caber bem na tela vertical */
+  padding             : 24px 20px;
   color               : var(--text-main);
   transition          : background 1.2s ease, border-color 1.2s ease;
   width               : 100%;
-  overflow-y          : auto; /* se por um absurdo a tela do usuário for menor que o card (modo paisagem), haverá uma rolagem interna delicada, não exterior */
 }
-/* esconde a scrollbar feia caso ative a prop de cima */
-.app-container::-webkit-scrollbar { display: none; }
 
 /* ─────────────────────────────────────────────────────
    CABEÇALHO

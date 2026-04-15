@@ -75,7 +75,7 @@ body {
 
 /* Sol */
 .sun-glow {
-  background : radial-gradient(circle at 80% 20%, rgba(255,255,100,0.55) 0%, rgba(255,200,0,0.18) 55%, transparent 75%);
+  background : radial-gradient(circle at 80% 20%, rgba(255, 230, 0, 0.8) 0%, rgba(255, 200, 0, 0.3) 40%, transparent 70%);
   opacity    : 0;
   transition : opacity 1s;
   animation  : sunPulse 4s ease-in-out infinite;
@@ -90,9 +90,9 @@ body.theme-partcloud .cloud-layer { opacity: 1; }
 
 .cloud {
   position      : absolute;
-  background    : rgba(255,255,255,0.13);
+  background    : rgba(255, 255, 255, 0.35); /* Increased visibility from 0.13 */
   border-radius : 50px;
-  filter        : blur(2px);
+  filter        : blur(4px);
   animation     : cloudDrift linear infinite;
 }
 .cloud::before,.cloud::after { content:''; position:absolute; background:inherit; border-radius:50%; }
@@ -113,17 +113,17 @@ body.theme-rainy .rain-container, body.theme-storm .rain-container { opacity:1; 
 .raindrop {
   position      : absolute;
   top           : -20px;
-  width         : 2px;
-  border-radius : 2px;
-  background    : linear-gradient(to bottom, transparent, rgba(160,196,255,.7));
+  width         : 3px; /* Emphasize rain drop */
+  border-radius : 3px;
+  background    : linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.9)); /* Much brighter rain */
   animation     : rainFall linear infinite;
 }
 @keyframes rainFall { to { transform: translateY(110vh); } }
 
 /* Névoa */
 .fog-layer {
-  background : repeating-linear-gradient(180deg,rgba(255,255,255,.06) 0,rgba(255,255,255,.12) 60px,rgba(255,255,255,.04) 120px);
-  animation  : fogDrift 12s ease-in-out infinite alternate;
+  background : repeating-linear-gradient(180deg, rgba(255,255,255,0.15) 0, rgba(255,255,255,0.3) 80px, rgba(255,255,255,0.1) 160px);
+  animation  : fogDrift 16s ease-in-out infinite alternate;
   opacity    : 0; transition: opacity 1s;
 }
 body.theme-fog .fog-layer { opacity:1; }

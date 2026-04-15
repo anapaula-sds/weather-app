@@ -1,0 +1,12 @@
+# Pastas e arquivos que o Git deve ignorar
+
+# Dependências do Node.js (caso seu projeto cresça ou utilize ferramentas como Vite/Babel)
+node_modules/
+
+# Arquivos de variáveis de ambiente com dados sensíveis
+.env
+.env.local
+
+# Arquivos temporários criados pelo sistema operacional
+.DS_Store
+Thumbs.db

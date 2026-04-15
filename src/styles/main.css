@@ -1,0 +1,373 @@
+/* =====================================================
+   WEATHER APP — CSS Principal
+   Design: Glassmorphism + Temas Dinâmicos
+   Font: Outfit (Google Fonts)
+   ===================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+/* ─────────────────────────────────────────────────────
+   VARIÁVEIS DE TEMA (padrão = noite)
+───────────────────────────────────────────────────── */
+:root {
+  --theme-bg-top : #0f2027;
+  --theme-bg-mid : #203a43;
+  --theme-bg-bot : #2c5364;
+  --glass-bg     : rgba(255,255,255,0.12);
+  --glass-border : rgba(255,255,255,0.22);
+  --glass-shadow : 0 8px 40px rgba(0,0,0,0.35);
+  --text-main    : #ffffff;
+  --text-sub     : rgba(255,255,255,0.85); /* mais legível */
+  --accent       : #60d0ff;
+  --accent2      : #a78bfa;
+  --error-color  : #ff6b6b;
+  --radius-card  : 24px;
+  --radius-input : 12px;
+}
+
+/* ── Temas por condição climática ── */
+body.theme-sunny    { --theme-bg-top:#f7971e; --theme-bg-mid:#ffd200; --theme-bg-bot:#f7971e; --accent:#fff176; --accent2:#ffe082; }
+body.theme-partcloud{ --theme-bg-top:#4e54c8; --theme-bg-mid:#8f94fb; --theme-bg-bot:#a0c4ff; --accent:#a0c4ff;}
+body.theme-cloudy   { --theme-bg-top:#485563; --theme-bg-mid:#29323c; --theme-bg-bot:#485563; --accent:#e0e0e0; --accent2:#90a4ae; }
+body.theme-rainy    { --theme-bg-top:#1c1c2e; --theme-bg-mid:#16213e; --theme-bg-bot:#0f3460; --accent:#a0c4ff; --accent2:#74b9ff; }
+body.theme-storm    { --theme-bg-top:#0d0d0d; --theme-bg-mid:#1a1a2e; --theme-bg-bot:#16213e; --accent:#ffe600; --accent2:#f5c518; }
+body.theme-fog      { --theme-bg-top:#757f9a; --theme-bg-mid:#d7dde8; --theme-bg-bot:#757f9a; --text-main:#2d3748; --text-sub:rgba(45,55,72,0.80); --glass-bg:rgba(255,255,255,0.35); }
+
+/* ─────────────────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────────────────── */
+*, *::before, *::after {
+  margin     : 0;
+  padding    : 0;
+  box-sizing : border-box;
+}
+
+html {
+  font-size : 16px;
+}
+
+/* 
+   Para forçar TUDO na mesma tela sem scroll:
+   - align-items: center
+   - overflow: hidden 
+*/
+body {
+  font-family : 'Outfit', sans-serif;
+  height      : 100vh;
+  width       : 100vw;
+  background  : linear-gradient(160deg, var(--theme-bg-top), var(--theme-bg-mid), var(--theme-bg-bot));
+  transition  : background 1.2s ease;
+  display     : flex;
+  justify-content : center;
+  align-items     : center;
+  padding     : 10px;
+  overflow    : hidden; /* 100% livre de scrolls */
+}
+
+/* ─────────────────────────────────────────────────────
+   CAMADAS DE ANIMAÇÃO (fundo)
+───────────────────────────────────────────────────── */
+.sun-glow, .cloud-layer, .rain-container, .fog-layer {
+  position       : fixed;
+  inset          : 0;
+  pointer-events : none;
+  z-index        : 0;
+}
+
+/* Sol */
+.sun-glow {
+  background : radial-gradient(circle at 80% 20%, rgba(255,255,100,0.55) 0%, rgba(255,200,0,0.18) 55%, transparent 75%);
+  opacity    : 0;
+  transition : opacity 1s;
+  animation  : sunPulse 4s ease-in-out infinite;
+}
+body.theme-sunny .sun-glow { opacity: 1; }
+@keyframes sunPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+
+/* Nuvens */
+.cloud-layer { opacity: 0; transition: opacity 1s; overflow: hidden; }
+body.theme-cloudy    .cloud-layer,
+body.theme-partcloud .cloud-layer { opacity: 1; }
+
+.cloud {
+  position      : absolute;
+  background    : rgba(255,255,255,0.13);
+  border-radius : 50px;
+  filter        : blur(2px);
+  animation     : cloudDrift linear infinite;
+}
+.cloud::before,.cloud::after { content:''; position:absolute; background:inherit; border-radius:50%; }
+.cloud-1 { width:200px;height:50px;top:12%;left:-220px;animation-duration:30s; }
+.cloud-1::before{width:90px;height:90px;top:-40px;left:30px}
+.cloud-1::after {width:60px;height:60px;top:-28px;left:100px}
+.cloud-2 { width:280px;height:60px;top:32%;left:-300px;animation-duration:42s;animation-delay:-14s }
+.cloud-2::before{width:110px;height:110px;top:-50px;left:50px}
+.cloud-2::after {width:70px;height:70px;top:-32px;left:160px}
+.cloud-3 { width:160px;height:40px;top:62%;left:-180px;animation-duration:24s;animation-delay:-6s }
+.cloud-3::before{width:70px;height:70px;top:-32px;left:20px}
+.cloud-3::after {width:50px;height:50px;top:-22px;left:80px}
+@keyframes cloudDrift { from{transform:translateX(0)} to{transform:translateX(120vw)} }
+
+/* Chuva */
+.rain-container { opacity:0; overflow:hidden; transition:opacity .8s; }
+body.theme-rainy .rain-container, body.theme-storm .rain-container { opacity:1; }
+.raindrop {
+  position      : absolute;
+  top           : -20px;
+  width         : 2px;
+  border-radius : 2px;
+  background    : linear-gradient(to bottom, transparent, rgba(160,196,255,.7));
+  animation     : rainFall linear infinite;
+}
+@keyframes rainFall { to { transform: translateY(110vh); } }
+
+/* Névoa */
+.fog-layer {
+  background : repeating-linear-gradient(180deg,rgba(255,255,255,.06) 0,rgba(255,255,255,.12) 60px,rgba(255,255,255,.04) 120px);
+  animation  : fogDrift 12s ease-in-out infinite alternate;
+  opacity    : 0; transition: opacity 1s;
+}
+body.theme-fog .fog-layer { opacity:1; }
+@keyframes fogDrift { from{transform:translateX(-3%)} to{transform:translateX(3%)} }
+
+/* ─────────────────────────────────────────────────────
+   WRAPPER & CARD
+───────────────────────────────────────────────────── */
+.app-wrapper {
+  position  : relative;
+  z-index   : 10;
+  width     : 100%;
+  max-width : 420px;
+  max-height: 98vh; /* para garantir que nunca cresça mais que a tela */
+  margin    : 0 auto;
+  display   : flex;
+  flex-direction: column;
+}
+
+.app-container {
+  background          : var(--glass-bg);
+  backdrop-filter     : blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border              : 1px solid var(--glass-border);
+  border-radius       : var(--radius-card);
+  box-shadow          : var(--glass-shadow);
+  padding             : 24px 20px 20px; /* Reduzido para caber bem na tela vertical */
+  color               : var(--text-main);
+  transition          : background 1.2s ease, border-color 1.2s ease;
+  width               : 100%;
+  overflow-y          : auto; /* se por um absurdo a tela do usuário for menor que o card (modo paisagem), haverá uma rolagem interna delicada, não exterior */
+}
+/* esconde a scrollbar feia caso ative a prop de cima */
+.app-container::-webkit-scrollbar { display: none; }
+
+/* ─────────────────────────────────────────────────────
+   CABEÇALHO
+───────────────────────────────────────────────────── */
+.app-header {
+  text-align    : center;
+  margin-bottom : 16px;
+}
+.app-header .weather-icon-big {
+  font-size     : 2.2rem;
+  display       : block;
+  margin-bottom : 2px;
+  animation     : floatIcon 3s ease-in-out infinite;
+}
+.app-header h1 {
+  font-size     : 1.35rem;
+  font-weight   : 800;
+  letter-spacing: -.4px;
+  color         : var(--text-main);
+}
+.app-header p {
+  display: none; /* Escondido para otimizar espaço de tela! */
+}
+
+/* ─────────────────────────────────────────────────────
+   FORMULÁRIO DE BUSCA
+───────────────────────────────────────────────────── */
+.search-form {
+  display  : flex;
+  gap      : 8px;
+  width    : 100%;
+  margin-bottom: 12px;
+}
+.search-form input {
+  flex      : 1 1 0%;
+  min-width : 0;
+  padding   : 10px 14px;
+  background: rgba(255,255,255,0.15);
+  border    : 1px solid var(--glass-border);
+  border-radius: var(--radius-input);
+  color     : var(--text-main);
+  font-family: 'Outfit', sans-serif;
+  font-size : .9rem;
+  outline   : none;
+  transition: border-color .25s, background .25s;
+}
+.search-form input::placeholder { color: rgba(255,255,255,.6); }
+.search-form input:focus {
+  border-color: var(--accent);
+  background   : rgba(255,255,255,.22);
+}
+.search-form button {
+  flex-shrink  : 0;
+  padding      : 10px 16px;
+  background   : linear-gradient(135deg, var(--accent), var(--accent2));
+  color        : #fff;
+  border       : none;
+  border-radius: var(--radius-input);
+  font-family  : 'Outfit', sans-serif;
+  font-size    : .9rem;
+  font-weight  : 600;
+  cursor       : pointer;
+  transition   : transform .15s, box-shadow .2s;
+}
+.search-form button:hover  { transform:translateY(-1px); box-shadow:0 4px 16px rgba(96,208,255,.45); }
+.search-form button:active { transform:translateY(0); }
+
+/* ─────────────────────────────────────────────────────
+   TOGGLE ESTILO iOS (BONITO E ALINHADO)
+───────────────────────────────────────────────────── */
+.unit-toggle {
+  display        : flex;
+  justify-content: center; /* Centralizado perfeitamente */
+  align-items    : center;
+  gap            : 4px;
+  background     : rgba(0,0,0,0.15); /* Fundo tipo cápsula */
+  border-radius  : 16px;
+  padding        : 6px;
+  margin         : 0 auto 8px auto;
+  width          : max-content; /* Alarga de acordo com o interior */
+}
+
+/* Botões do Toggle */
+.unit-toggle button {
+  background   : transparent;
+  border       : none;
+  border-radius: 12px;
+  color        : rgba(255,255,255,0.6);
+  font-family  : 'Outfit', sans-serif;
+  font-size    : 1.1rem; /* Bem Maiores e legíveis */
+  font-weight  : 700;
+  padding      : 6px 20px; /* Largos lado a lado */
+  cursor       : pointer;
+  transition   : all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.unit-toggle button.active {
+  background  : var(--accent);
+  color       : #0f172a; /* Cor super escura p/ contrastar bem contra o botão */
+  box-shadow  : 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.unit-toggle button:not(.active):hover {
+  color: #fff;
+}
+
+/* ─────────────────────────────────────────────────────
+   STATUS / LOADING / ERRO
+───────────────────────────────────────────────────── */
+.status-message {
+  min-height     : 20px;
+  font-size      : .85rem;
+  color          : var(--text-sub);
+  text-align     : center;
+  display        : flex;
+  align-items    : center;
+  justify-content: center;
+  gap            : 6px;
+}
+.status-message.error { color: var(--error-color); }
+.loading-dots span {
+  display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--accent); margin:0 2px;
+  animation: bounceDot 1.1s infinite both;
+}
+.loading-dots span:nth-child(2) { animation-delay:.18s }
+.loading-dots span:nth-child(3) { animation-delay:.36s }
+
+/* ─────────────────────────────────────────────────────
+   SEÇÃO DE RESULTADO
+───────────────────────────────────────────────────── */
+.weather-result {
+  margin-top : 12px;
+  text-align : center;
+  animation  : fadeUp .5s ease;
+}
+.weather-result.hidden { display: none; }
+
+/* Ícone */
+.weather-icon-result {
+  font-size   : 3.8rem;
+  display     : block;
+  line-height : 1;
+  margin-bottom: 2px;
+  filter      : drop-shadow(0 4px 12px rgba(0,0,0,.3));
+  animation   : floatIcon 3s ease-in-out infinite;
+}
+
+/* Cidade */
+.weather-city {
+  font-size  : 1.25rem;
+  font-weight: 700;
+  color      : var(--text-main);
+  margin-bottom: 0px;
+}
+.weather-condition-label {
+  font-size    : .85rem;
+  color        : var(--text-sub);
+  margin-bottom: 8px;
+}
+
+/* A TEMPERATURA GRANDE (100% BRANCA PARA CONTRASTE ABSOLUTO) */
+.temperature-display {
+  font-size  : 4.8rem;
+  font-weight: 800;
+  line-height: 1;
+  color      : #ffffff; /* FIM DO AZUL, agora é puramente BRANCO */
+  text-shadow: 0 4px 20px rgba(0,0,0,0.35); /* Sombra pesada para desgarrar de qualquer fundo claro */
+  margin-bottom: 12px;
+}
+
+/* Grade de detalhes */
+.details-grid {
+  display              : grid;
+  grid-template-columns: 1fr 1fr 1fr; /* 3 colunas para economizar altura */
+  gap                  : 6px;
+}
+.detail-tile {
+  background   : rgba(255,255,255,.08);
+  border       : 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding      : 8px 4px;
+  display      : flex;
+  flex-direction: column;
+  align-items  : center;
+  gap          : 2px;
+}
+.detail-tile .tile-icon  { font-size:1.1rem; }
+.detail-tile .tile-label { font-size: .62rem; font-weight:600; text-transform:uppercase; color:var(--text-sub); }
+.detail-tile .tile-value { font-size: .85rem; font-weight:700; color:var(--text-main); }
+
+/* Barra de hora local */
+.local-time-bar {
+  margin-top   : 10px;
+  padding      : 8px;
+  background   : rgba(255,255,255,.08);
+  border       : 1px solid var(--glass-border);
+  border-radius: 10px;
+  font-size    : .8rem;
+  color        : var(--text-sub);
+}
+.local-time-bar strong { color: var(--text-main); }
+
+/* ─────────────────────────────────────────────────────
+   RESPONSIVIDADE (Apenas de ajuste fino se extremar)
+───────────────────────────────────────────────────── */
+@media (max-width: 380px) {
+  /* Em celulares ainda menores, a grade vira 2 colunas */
+  .details-grid { grid-template-columns: 1fr 1fr; }
+  .temperature-display { font-size: 4.2rem; }
+  
+  /* Input e botão empilhados para não engordar */
+  .search-form { flex-direction: column; }
+}

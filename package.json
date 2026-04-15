@@ -1,0 +1,17 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "Aplicativo simples de clima para iniciantes",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "echo \"Abra public/index.html no navegador (via Live Server) para executar o projeto\""
+  },
+  "keywords": [
+    "weather",
+    "javascript",
+    "iniciante",
+    "vanilla-js"
+  ],
+  "author": "",
+  "license": "ISC"
+}

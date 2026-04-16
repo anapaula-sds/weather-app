@@ -20,18 +20,18 @@ Permitir que o usuário digite o nome de qualquer cidade mundial e obtenha insta
 
 ```text
 weather-app/
-├─ src/
-│  ├─ api/
-│  │  └─ weatherApi.js        # Executa as comunicações na Internet
-│  ├─ components/
-│  │  ├─ SearchForm.js        # Lida com teclados e eventos do form
-│  │  └─ WeatherCard.js       # Injeta dinamicamente as respostas visuais
-│  ├─ utils/
-│  │  └─ formatWeather.js     # Formata visuais de temperatura e traduz emoticons
-│  ├─ styles/
-│  │  └─ main.css             # Cores e posicionamentos centrais em CSS puro
-│  └─ main.js                 # Ponto Central Global (Entry Point)
 ├─ public/
+│  ├─ src/
+│  │  ├─ api/
+│  │  │  └─ weatherApi.js        # Executa as comunicações na Internet
+│  │  ├─ components/
+│  │  │  ├─ SearchForm.js        # Lida com teclados e eventos do form
+│  │  │  └─ WeatherCard.js       # Injeta dinamicamente as respostas visuais
+│  │  ├─ utils/
+│  │  │  └─ formatWeather.js     # Formata visuais de temperatura e traduz emoticons
+│  │  ├─ styles/
+│  │  │  └─ main.css             # Cores e posicionamentos centrais em CSS puro
+│  │  └─ main.js                 # Ponto Central Global (Entry Point)
 │  └─ index.html              # Interface Gráfica de Usuário Estrutural
 ├─ APRENDIZADO.md             # 🌟 Livro Diario com todas as matérias extraidas
 ├─ package.json               # Configurações de módulos de sistema
@@ -58,3 +58,18 @@ Foi adicionado aqui, no pacote, o manual super completo chamado [**APRENDIZADO.m
 Não feche o repositório sem ler a reflexão incrível que está descrita por lá! 
 
 Obrigada por acompanhar essa montagem fantástica. Cursos reais desenvolvem dev reais! ✨
+
+---
+
+## ☁️ Como fazer o Deploy no Render
+
+Este projeto foi preparado para subir diretamente como **Static Site** de forma autossuficiente e sem complexidade de builds:
+
+1. Suba todo este código para um repositório no seu GitHub.
+2. Crie uma conta no [Render](https://render.com) e conecte com seu GitHub.
+3. No botão superior, clique em **New** e escolha **Static Site**.
+4. Selecione o seu repositório do Weather App e preencha as configurações **exatamente** assim:
+   - **Root Directory:** `weather-app` (Apenas se essa for a pasta base dentro do seu repositório, deixe em branco caso os arquivos já estejam na raiz do repo).
+   - **Build Command:** *(deixe em branco)*
+   - **Publish Directory:** `public`
+5. Clique em **Create Static Site** e espere 1 minutinho. Seu site estará ao vivo na internet!
